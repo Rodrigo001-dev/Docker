@@ -1,0 +1,30 @@
+version: '3'
+
+# cada container vai ser encarado como serviço
+services:
+  web:
+    # o build: . significa que invés de pegar a imagem pronta ele vai dar um
+    # build na imagem baseado no Dockerfile
+    # build: .
+    image: rodrigorael/nginx-iniciando-docker
+    ports:
+      - 8080:80
+    # esto compartulhando um volume 
+    volumes: 
+      # estou falando que eu tenho uma pasta html e que qualquer alteração nela
+      # também vai ser alterado na minha imagem(usr/share/nginx/html)
+      - "./html:/usr/share/nginx/html"
+
+  mysql:
+    image: mysql:5.7
+    volumes: 
+      # eu estou criando uma pasta onde ele vai guardar os arquivos que eu
+      # preciso para que quando o container seja eliminado eu não perca todos os
+      # dados
+      - ./mysql-data:/var/lib/mysql
+    # para criar o banco de dados do mysql é preciso das variáveis de ambiente
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=iniciando
+    ports:
+      - 3306:3306
